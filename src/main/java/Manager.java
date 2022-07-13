@@ -6,16 +6,15 @@ public class Manager {
     public Manager(Repository repo) {
         this.repo = repo;
     }
-    public Ticket[] findAll(String from, String to) {
-        return repo.getSetTicket();
-    }
+
     public void add(Ticket ticket) {
         repo.add(ticket);
     }
-    public Ticket[] searchBy(String text) {
+
+    public Ticket[] findAll(String from, String to) {
         Ticket[] result = new Ticket[0];
         for (Ticket ticket : repo.getSetTicket()) {
-            if (matches(ticket, text)) {
+            if (matches(ticket, from, to)) {
                 Ticket[] tmp = new Ticket[result.length + 1];
                 for (int i = 0; i < result.length; i++) {
                     tmp[i] = result[i];
@@ -28,8 +27,10 @@ public class Manager {
         return result;
     }
 
-    public boolean matches(Ticket ticket, String search) {
-
-        return ticket.getFrom().contains(search);
+    public boolean matches(Ticket ticket, String from, String to) {
+        if (ticket.getFrom().contains(from)) {
+            return ticket.getTo().contains(to);
+        }
+        return false;
     }
 }
